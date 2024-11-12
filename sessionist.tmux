@@ -30,7 +30,7 @@ set_goto_session_bindings() {
 	local key_bindings=$(get_tmux_option "$tmux_option_goto" "$default_key_bindings_goto")
 	local key
 	for key in $key_bindings; do
-		tmux bind "$key" run "$CURRENT_DIR/scripts/goto_session.sh"
+		tmux bind -N "Goto session" "$key" run "$CURRENT_DIR/scripts/goto_session.sh"
 	done
 }
 
@@ -39,7 +39,7 @@ set_alternate_session_binding() {
 	local key
 	for key in $key_bindings; do
 		# switch to the last/alternate session
-		tmux bind "$key" switch-client -l
+		tmux bind -N "Goto last session" "$key" switch-client -l
 	done
 }
 
@@ -49,7 +49,7 @@ set_new_session_binding() {
 	local key_bindings=$(get_tmux_option "$tmux_option_new" "$default_key_bindings_new")
 	local key
 	for key in $key_bindings; do
-		tmux bind "$key" run "$CURRENT_DIR/scripts/new_session_prompt.sh"
+		tmux bind -N "Create new session" "$key" run "$CURRENT_DIR/scripts/new_session_prompt.sh"
 	done
 }
 
@@ -58,7 +58,7 @@ set_promote_pane_binding() {
 	local key_bindings=$(get_tmux_option "$tmux_option_promote_pane" "$default_key_bindings_promote_pane")
 	local key
 	for key in $key_bindings; do
-		tmux bind "$key" run "$CURRENT_DIR/scripts/promote_pane.sh '#{session_name}' '#{pane_id}' '#{pane_current_path}'"
+		tmux bind "Promote pane to new session" "$key" run "$CURRENT_DIR/scripts/promote_pane.sh '#{session_name}' '#{pane_id}' '#{pane_current_path}'"
 	done
 }
 
@@ -67,7 +67,7 @@ set_promote_window_binding() {
 	local key_bindings=$(get_tmux_option "$tmux_option_promote_window" "$default_key_bindings_promote_window")
 	local key
 	for key in $key_bindings; do
-		tmux bind "$key" run "$CURRENT_DIR/scripts/promote_window.sh '#{session_name}' '#{window_id}' '#{window_name}' '#{pane_current_path}'"
+		tmux bind -N "Promote window to new session" "$key" run "$CURRENT_DIR/scripts/promote_window.sh '#{session_name}' '#{window_id}' '#{window_name}' '#{pane_current_path}'"
 	done
 }
 
@@ -97,8 +97,8 @@ set_join_pane_binding() {
 	local secondary_key_table="join-pane"
 	local break_pane_flag="-b"
 	set_join_pane_secondary_bindings "$secondary_key_table" "$break_pane_flag"
-	for key in "$key_bindings"; do
-		tmux bind "$key" run "$CURRENT_DIR/scripts/join_pane.sh '$secondary_key_table' '$break_pane_flag'"
+	for key in $key_bindings; do
+		tmux bind -N "Join marked pane to current session/window" "$key" run "$CURRENT_DIR/scripts/join_pane.sh '$secondary_key_table' '$break_pane_flag'"
 	done
 }
 
